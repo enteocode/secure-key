@@ -1,19 +1,26 @@
 # @enteocode/secure-key
 
-A memory-hardened key container built with Rust & WASM for tamper-resistant crypto in Node.js.
-
 [![Build Status](https://github.com/enteocode/secure-key/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/enteocode/secure-key/actions/workflows/ci.yml)
 [![Coverage](https://coveralls.io/repos/github/enteocode/secure-key/badge.svg?branch=master)](https://coveralls.io/github/enteocode/secure-key?branch=master)
 [![WASM Security Badge](https://img.shields.io/badge/WASM-Secure-007acc)](https://webassembly.org/security/)
 [![Zeroize Verified](https://img.shields.io/badge/Memory-Zeroized-4caf50)](https://crates.io/crates/zeroize)
 
----
+A memory-hardened key container built with Rust & WASM for tamper-resistant crypto in Node.js.
+
 
 ## Features
 
-- **Military-Grade Protection:** XOR masking, memory segmentation and automatic zeroization
-- **Cryptographic Integrity:** HMAC tamper detection, runtime verification, timing attack resistance
-- **Developer Friendly:** WebAssembly speed, TypeScript API and seamless Crypto module integration
+### Military-Grade Protection
+
+XOR masking, memory segmentation and automatic zeroization
+
+### Developer Friendly
+
+WebAssembly speed, TypeScript API and seamless Crypto module integration
+
+### Cryptographic Integrity  
+
+HMAC tamper detection, runtime verification, timing attack resistance
 
 ## Installation
 
@@ -46,7 +53,9 @@ if (apiKey.equals(readFileSync('backup.key'))) {
 
 > **Note**: All outputs will always return `Uint8Array`, even if the input was a `Buffer`.
 
-## Safe JSON Representation
+## Security
+
+### Safe JSON Representation
 
 Use `JSON.stringify` to obtain a non-sensitive fingerprint:
 
@@ -60,15 +69,15 @@ Use `JSON.stringify` to obtain a non-sensitive fingerprint:
 - The `hmac` tag is **safe to share**
 - You can use it to compare keys without ever revealing the underlying secret
 
-## Security Architecture
+### Architecture
 
-| Technique        | Implementation Details                | Protection Against   |
-|------------------|---------------------------------------|----------------------|
-| Random Splitting | Data divided at unpredictable offsets | Memory scanning      |
-| XOR Obfuscation  | Masked with CSPRNG-generated vectors  | Memory dump analysis |
-| WASM Sandboxing  | Isolated memory space                 | Process inspection   |
+| Technique            | Implementation Details                | Protection Against   |
+|----------------------|---------------------------------------|----------------------|
+| **Random Splitting** | Data divided at unpredictable offsets | Memory scanning      |
+| **XOR Obfuscation**  | Masked with CSPRNG-generated vectors  | Memory dump analysis |
+| **WASM Sandboxing**  | Isolated memory space                 | Process inspection   |
 
-## Development Setup
+## Development
 
 ### Prerequisites
 
@@ -96,20 +105,21 @@ npm run build:wasm
 
 This will generate its output to `wasm/`, needed for further TypeScript development.
 
-### Wrapper
+### TypeScript Wrapper
 
-The code must be compiled before running tests, as tree-shaking is required to eliminate irrelevant parts of the output.
+Tests must run against the distributed (tree-shaken) package.
+The raw WASM output includes broad compatibility code that breaks outside bundlers. Tree-shaking is essential to eliminate these conflicts before testing.
 
 ```shell
 npm run build
 npm test
 ```
 
-## Security Considerations
+## Considerations
 
-- Always combine with transport security (HTTPS/TLS)
-- Never log unwrapped key material
-- Environment variables should only contain fingerprints
+- **Always combine with transport security** (HTTPS/TLS)
+- **Never log unwrapped key material**
+- **Environment variables should only contain fingerprints**
 
 ## Benchmarks
 
@@ -136,19 +146,12 @@ Tested on AWS t4g.micro (Node.js 20)
 
 
 [A]: https://www.linkedin.com/in/enteocode/
-
 [L]: http://www.opensource.org/licenses/MIT
-
 [G]: https://commission.europa.eu/law/law-topic/data-protection_en
-
 [N]: https://nis2directive.eu/
 
 [R1]: https://tools.ietf.org/html/rfc2104
-
 [R2]: https://tools.ietf.org/html/rfc4086
-
 [C1]: https://cwe.mitre.org/data/definitions/200.html
-
 [C2]: https://cwe.mitre.org/data/definitions/125.html
-
 [C3]: https://cwe.mitre.org/data/definitions/208.html
