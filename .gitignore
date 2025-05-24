@@ -1,0 +1,23 @@
+.DS_Store
+.idea
+.vscode
+
+# Environment variables
+
+.env
+
+# Rust
+
+/target
+/wasm
+
+# Directories
+
+/coverage/
+/dist/
+/node_modules/
+
+# CI/CD
+
+.husky
+.rollup.cache
