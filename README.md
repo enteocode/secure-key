@@ -1,9 +1,8 @@
-# @enteocode/secure-key
+# Secure In-Memory Key
 
 [![Build Status](https://github.com/enteocode/secure-key/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/enteocode/secure-key/actions/workflows/ci.yml)
-[![Coverage](https://coveralls.io/repos/github/enteocode/secure-key/badge.svg?branch=master)](https://coveralls.io/github/enteocode/secure-key?branch=master)
-[![WASM Security Badge](https://img.shields.io/badge/WASM-Secure-007acc)](https://webassembly.org/security/)
-[![Zeroize Verified](https://img.shields.io/badge/Memory-Zeroized-4caf50)](https://crates.io/crates/zeroize)
+[![License](https://img.shields.io/badge/license-MIT-blue)][L]
+[![WASM Security Badge](https://img.shields.io/badge/WASM-Memory_Safe_Sandbox-blue)](https://webassembly.org/security/)
 
 A memory-hardened key container built with Rust & WASM for tamper-resistant crypto in Node.js.
 
@@ -37,16 +36,18 @@ import { createCipheriv } from 'node:crypto';
 
 // Securely store API keys, tokens, or certificates
 
-const apiKey = SecureKey.from(Buffer.from('sk_live_...'));
+const secret = SecureKey.from(Buffer.from('sk_live_...'));
 
 // Directly use with Node.js Crypto
-// Unwrap gives direct memory reference. Never clone it.
+// Unwrap gives direct memory reference.
+// 
+// Never clone it!
 
-const cipher = createCipheriv('aes-256-gcm', apiKey.unwrap(), iv);
+const cipher = createCipheriv('aes-256-gcm', secret.unwrap(), iv);
 
-// Safe comparison
+// Time Safe Comparison
 
-if (apiKey.equals(readFileSync('backup.key'))) {
+if (secret.equals(readFileSync('backup.key'))) {
     console.log('MATCH');
 }
 ```
