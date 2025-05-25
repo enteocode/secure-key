@@ -8,6 +8,16 @@ import { SecureKey } from '../dist';
 // Tree-shaking is essential to eliminate these conflicts before testing.
 
 describe('SecureKey', () => {
+    /**
+     * Gets JSON representation of the SecureKey and returns it as an object
+     *
+     * @internal
+     * @param key
+     */
+    const getJsonObject = (key: SecureKey) => {
+        return JSON.parse(JSON.stringify(key));
+    }
+
     it('should be defined', () => {
         expect(SecureKey).toBeDefined();
     });
@@ -40,10 +50,16 @@ describe('SecureKey', () => {
     });
 
     it('should create a safe JSON representation', () => {
-        const json = JSON.stringify(SecureKey.from(Buffer.from('Test')));
-        const read = JSON.parse(json);
+        const json = getJsonObject(SecureKey.from(Buffer.from('Test')));
 
-        expect(read.type).toBe(SecureKey.name);
-        expect(read.hash).toMatch(/[0-9a-f]{64}/);
+        expect(json.type).toBe(SecureKey.name);
+        expect(json.hash).toMatch(/[0-9a-f]{64}/);
+    });
+
+    it('should hash match for the same content', () => {
+        const a = getJsonObject(SecureKey.from(Buffer.from('Test')));
+        const b = getJsonObject(SecureKey.from(Buffer.from('Test')));
+
+        expect(a.hash).toBe(b.hash);
     });
 });
