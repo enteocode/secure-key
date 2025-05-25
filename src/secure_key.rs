@@ -27,24 +27,48 @@ impl Drop for SecureKey {
     }
 }
 
+// Helpers
+
+fn xor(data: &[u8], mask: &[u8]) -> Vec<u8> {
+    data.to_vec()
+        .iter()
+        .enumerate()
+        .map(|(i, &b)| b ^ mask[i])
+        .collect()
+}
+
+fn reveal(masked1: &[u8], masked2: &[u8], mask: &[u8]) -> Vec<u8> {
+    let mut combined = masked1.to_vec();
+
+    combined.reverse();
+    combined.extend_from_slice(masked2);
+
+    xor(&combined, &mask)
+}
+
+// Implementation
+
 impl SecureKey {
     pub fn new(data: &[u8]) -> SecureKey {
         let len = data.len();
-        let split = random_range(0..=len);
-        let mut mask = vec![0u8; len];
 
-        fill(&mut mask[..len]);
+        // Set the length varying to make memory allocation unpredictable
 
-        let masked: Vec<u8> = data.iter().enumerate().map(|(i, &b)| b ^ mask[i]).collect();
+        let mut mask: Vec<u8> = vec![0u8; random_range(len..=len + 16)];
 
-        let (m1, m2) = masked.split_at(split);
-        let masked1 = m1.to_vec();
-        let masked2 = m2.to_vec();
+        fill(&mut mask[..]);
+
+        let masked: Vec<u8> = xor(&data, &mask);
+        let (m1, m2) = masked.split_at(random_range(0..=len));
+        let mut masked1 = m1.to_vec();
+
+        masked1.reverse();
 
         let mut hmac_key = [0u8; 32];
 
         fill(&mut hmac_key);
 
+        let masked2 = m2.to_vec();
         let mut hmac = HmacSha256::new_from_slice(&hmac_key).expect("HMAC initialization failed");
 
         hmac.update(data);
@@ -64,17 +88,17 @@ impl SecureKey {
         if !self.verify() {
             panic!("HMAC verification failed - data corrupted");
         }
-        let original = reconstruct_unmasked_data(&self.masked1, &self.masked2, &self.mask);
+        let data = reveal(&self.masked1, &self.masked2, &self.mask);
 
-        original.ct_eq(other).unwrap_u8() == 1
+        data.ct_eq(other).unwrap_u8() == 1
     }
 
     pub fn verify(&self) -> bool {
-        let original = reconstruct_unmasked_data(&self.masked1, &self.masked2, &self.mask);
+        let data = reveal(&self.masked1, &self.masked2, &self.mask);
 
         let mut hmac = HmacSha256::new_from_slice(&self.hmac_key).expect("HMAC init failed");
 
-        hmac.update(&original);
+        hmac.update(&data);
         hmac.verify_slice(&self.hmac_tag).is_ok()
     }
 
@@ -82,21 +106,10 @@ impl SecureKey {
         if !self.verify() {
             panic!("HMAC verification failed - data corrupted");
         }
-        reconstruct_unmasked_data(&self.masked1, &self.masked2, &self.mask)
+        reveal(&self.masked1, &self.masked2, &self.mask)
     }
 
     pub fn get_hmac(&self) -> String {
         encode(&self.hmac_tag)
     }
-}
-
-fn reconstruct_unmasked_data(masked1: &[u8], masked2: &[u8], mask: &[u8]) -> Vec<u8> {
-    let mut combined = masked1.to_vec();
-
-    combined.extend_from_slice(masked2);
-    combined
-        .iter()
-        .enumerate()
-        .map(|(i, &b)| b ^ mask[i])
-        .collect()
 }
