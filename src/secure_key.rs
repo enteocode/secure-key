@@ -1,7 +1,7 @@
 use hex::encode;
 use hmac::{Hmac, Mac};
 use rand::{fill, random_range};
-use sha2::Sha256;
+use sha2::{Digest, Sha256};
 use subtle::ConstantTimeEq;
 use wasm_bindgen::prelude::*;
 use zeroize::Zeroize;
@@ -111,5 +111,14 @@ impl SecureKey {
 
     pub fn get_hmac(&self) -> String {
         encode(&self.hmac_tag)
+    }
+
+    pub fn get_hash(&self) -> Vec<u8> {
+        if !self.verify() {
+            panic!("HMAC verification failed - data corrupted");
+        }
+        let data = reveal(&self.masked1, &self.masked2, &self.mask);
+        
+        Sha256::digest(&data).to_vec()
     }
 }

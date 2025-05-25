@@ -62,11 +62,11 @@ Use `JSON.stringify` to obtain a non-sensitive fingerprint:
 ```json
 {
     "type": "SecureKey",
-    "hmac": "b770faba3065d1de2f27a5689ef4d188d154a7c20084333d810c6b8359b11ab9"
+    "hash": "532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25"
 }
 ```
 
-- The `hmac` tag is **safe to share**
+- The `hash` is a **cryptographic SHA-256 digest**
 - You can use it to compare keys without ever revealing the underlying secret
 
 ### Architecture

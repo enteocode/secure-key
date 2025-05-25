@@ -21,9 +21,10 @@ describe('SecureKey', () => {
     });
 
     it('should return the same data', () => {
-        const buffer = Buffer.from('Test');
+        const i = Buffer.from('Test');
+        const o = Buffer.from(SecureKey.from(i).unwrap());
 
-        expect(buffer.toString('hex')).toBe(Buffer.from(SecureKey.from(buffer).unwrap()).toString('hex'));
+        expect(i.equals(o)).toBe(true);
     });
 
     it('should verify integrity', () => {
@@ -43,6 +44,6 @@ describe('SecureKey', () => {
         const read = JSON.parse(json);
 
         expect(read.type).toBe(SecureKey.name);
-        expect(read.hmac).toMatch(/[0-9a-f]{16}/);
+        expect(read.hash).toMatch(/[0-9a-f]{64}/);
     });
 });

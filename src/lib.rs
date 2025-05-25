@@ -29,6 +29,11 @@ pub fn get_hmac(secure_key: &SecureKey) -> String {
 }
 
 #[wasm_bindgen]
+pub fn get_hash(secure_key: &SecureKey) -> Vec<u8> {
+    secure_key.get_hash()
+}
+
+#[wasm_bindgen]
 pub fn equals(secure_key: &SecureKey, other: &[u8]) -> bool {
     secure_key.equals(other)
 }

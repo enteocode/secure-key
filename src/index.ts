@@ -3,7 +3,7 @@ import {
     create_secure_key,
     destroy,
     get_data,
-    get_hmac,
+    get_hash,
     equals,
     verify,
     SecureKey as Pointer
@@ -37,6 +37,7 @@ const pointer = Symbol();
 export class SecureKey {
     /**
      * Internal pointer to WASM-managed instance
+     *
      * @private
      */
     private readonly [pointer]: Pointer;
@@ -96,9 +97,11 @@ export class SecureKey {
      * @public
      */
     toJSON() {
+        const hash = Buffer.from(get_hash(this[pointer])).toString('hex');
+
         return {
             type: SecureKey.name,
-            hmac: get_hmac(this[pointer])
+            hash
         };
     }
 
