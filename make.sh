@@ -9,7 +9,6 @@ export RUSTFLAGS='--cfg getrandom_backend="wasm_js"'
 # Compile
 
 cargo clean
-cargo build --release --target wasm32-unknown-unknown
 
 # Optimize assembly
 #
