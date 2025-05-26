@@ -1,5 +1,4 @@
 extern crate getrandom;
-extern crate hex;
 extern crate hmac;
 extern crate rand;
 extern crate sha2;
@@ -21,11 +20,6 @@ pub fn create_secure_key(data: &[u8]) -> SecureKey {
 #[wasm_bindgen]
 pub fn get_data(secure_key: &SecureKey) -> Vec<u8> {
     secure_key.get_data()
-}
-
-#[wasm_bindgen]
-pub fn get_hmac(secure_key: &SecureKey) -> String {
-    secure_key.get_hmac()
 }
 
 #[wasm_bindgen]
