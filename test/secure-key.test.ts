@@ -62,4 +62,11 @@ describe('SecureKey', () => {
 
         expect(a.hash).toBe(b.hash);
     });
+
+    it('should hash mismatch for different content', () => {
+        const a = getJsonObject(SecureKey.from(Buffer.from('Test')));
+        const b = getJsonObject(SecureKey.from(Buffer.from('test')));
+
+        expect(a.hash).not.toBe(b.hash);
+    });
 });
