@@ -1,4 +1,4 @@
-# Secure In-Memory Key
+![Secure In-Memory Key](https://raw.githubusercontent.com/enteocode/secure-key/master/resources/secure-key.logo.svg)
 
 [![Build Status](https://github.com/enteocode/secure-key/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/enteocode/secure-key/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue)][L]
@@ -9,16 +9,13 @@ A memory-hardened key container built with Rust & WASM for tamper-resistant cryp
 
 ## Features
 
-### Military-Grade Protection
-
+**Military-Grade Protection**  
 XOR masking, memory segmentation and automatic zeroization
 
-### Developer Friendly
-
+**Developer Friendly**  
 WebAssembly speed, TypeScript API and seamless Crypto module integration
 
-### Cryptographic Integrity  
-
+**Cryptographic Integrity**  
 HMAC tamper detection, runtime verification, timing attack resistance
 
 ## Installation
