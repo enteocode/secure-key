@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/enteocode/secure-key/compare/v1.1.0...v1.1.1) (2025-05-26)
+
+
+### Bug Fixes
+
+* removed unused HMAC getter ([1f9e566](https://github.com/enteocode/secure-key/commit/1f9e566db1b556d1125852d8991e2b6115731eb8))
+
+
+### Tests
+
+* added test to check hash mismatch on different content ([660f940](https://github.com/enteocode/secure-key/commit/660f9403d3afcac9296201d76eb4bdad2ec9dbae))
+* added unit-test for `hash` matching ([56c946e](https://github.com/enteocode/secure-key/commit/56c946e4bab14e8659aa7a0be36a1d3c637ea9d5))
+
+
+### Style
+
+* added logo ([b37251e](https://github.com/enteocode/secure-key/commit/b37251ee1e1f41a8ff36c3199b2e639d76797381))
+
 ## [1.1.0](https://github.com/enteocode/secure-key/compare/v1.0.0...v1.1.0) (2025-05-25)
 
 
